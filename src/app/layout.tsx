@@ -2,9 +2,10 @@ import "./globals.css"
 import { Comfortaa } from "next/font/google"
 
 import { cn } from "@/lib/shadcn-ui"
-import Providers from "@/context/providers"
+import Providers from "@/components/providers"
 
 const comfortaa = Comfortaa({ subsets: ["latin"] })
+
 export default function RootLayout({
   children,
 }: {
