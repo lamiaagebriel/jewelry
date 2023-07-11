@@ -8,7 +8,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  relationMode = "prisma"
+  relationMode = "foreignKeys"
 }
 
 
@@ -51,24 +51,102 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-
-
-  // Database
-  role          Role @default(CUSTOMER)
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-}
 
 enum Role {
   ADMIN
   CUSTOMER
 }
+
+model User {
+  id              String    @id @default(cuid())
+  name            String?
+  email           String?   @unique
+  emailVerified  DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+
+
+  // Database
+  role          Role @default(CUSTOMER)
+  orders        Order[]
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+
+model Image {
+  product_id      String
+  src             String       @unique
+
+  product         Product      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([product_id])
+}
+
+model Address {
+  order_id        String       @unique
+  name            String
+  phone           String
+  address_line    String?
+  zip             String
+  city            String
+  country         String
+
+  order         Order      @relation(fields: [order_id], references: [id], onDelete: Cascade)
+}
+
+
+model Product {
+  id                String       @id @default(cuid())
+  slug              String       @unique
+  title             String
+  image             String
+  description       String
+  category          String?
+  price             Float        @default(0)
+  discount          Float        @default(0)
+  quantity          Float        @default(0)
+  is_new            Boolean      @default(false)
+  created_at        DateTime     @default(now())
+  updated_at        DateTime     @updatedAt
+ 
+  
+  images            Image[]
+  orders            Order[]
+}
+
+
+  // sizes: [5, 6, 7, 8, 9],
+  // color: "White",
+    
+
+
+model Order {
+  id                String       @id @default(cuid())
+  user_id           String
+  products          Product[]
+  address           Address?
+  created_at        DateTime     @default(now())
+  updated_at        DateTime     @updatedAt
+
+  user              User         @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+}
+
+
+// model Review {
+//   id                  String    @id @default(cuid())
+//   title               String
+//   content             String
+//   rating              Int
+//   user_id             String
+//   product_id          String
+//   created_at          DateTime @default(now())
+//   updated_at          DateTime @updatedAt
+  
+//   user                User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+//   product             Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+// }
 

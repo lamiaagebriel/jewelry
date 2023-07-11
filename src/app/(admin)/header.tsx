@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { Session } from "next-auth"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar"
 import {
@@ -12,10 +11,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/ui/dropdown-menu"
-import { LogOutButton } from "@/components/buttons"
+import { LogOutButton, ModeButton } from "@/components/buttons"
 import { getFallback } from "@/lib/shadcn-ui"
-import { NAV_LINKS_ADMIN } from "@/utils/constants"
+import { NAV_LINKS_ADMIN } from "@/constants/layout"
 import { getAuthSession } from "@/lib/next-auth"
+import { Paragraph } from "@/ui/typography"
 
 const Header = async () => {
   const session = await getAuthSession()
@@ -23,8 +23,8 @@ const Header = async () => {
 
   return (
     <header className="border-b">
-      <div className="container py-4 flex items-center">
-        <nav className="flex items-center space-x-4 lg:space-x-6">
+      <div className="container py-4 flex justify-between items-center">
+        <nav className="flex items-center gap-4">
           {NAV_LINKS_ADMIN.map((link, i) => (
             <Link
               key={i}
@@ -36,7 +36,7 @@ const Header = async () => {
           ))}
         </nav>
 
-        <div className="ml-auto">
+        <div className="flex justify-end items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar>
@@ -52,9 +52,9 @@ const Header = async () => {
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>
                 {session.user?.name}
-                <p className="text-[10px] text-slate-500">
+                <Paragraph variant="muted" className="text-[10px]">
                   {session.user?.email}
-                </p>
+                </Paragraph>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
@@ -66,6 +66,8 @@ const Header = async () => {
               <LogOutButton />
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <ModeButton />
         </div>
       </div>
     </header>

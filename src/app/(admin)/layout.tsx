@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/providers"
 import Header from "./header"
 
 export default function RootLayout({
@@ -7,8 +8,10 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <Header />
-      <main className="grow py-4">{children}</main>
+      <ThemeProvider>
+        <Header />
+        <main className="grow py-4">{children}</main>
+      </ThemeProvider>
     </>
   )
 }

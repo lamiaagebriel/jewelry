@@ -1,6 +1,5 @@
 import Link from "next/link"
 
-import { Boxes } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar"
 import {
   DropdownMenu,
@@ -9,12 +8,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/ui/dropdown-menu"
 import { buttonVariants } from "@/ui/button"
 import { Heading } from "@/ui/typography"
-import { NAV_LINKS } from "@/utils/constants"
+import { NAV_LINKS } from "@/constants/layout"
 import { getAuthSession } from "@/lib/next-auth"
 import { LogOutButton, CartButton } from "@/components/buttons"
 import { getFallback } from "@/lib/shadcn-ui"

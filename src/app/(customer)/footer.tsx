@@ -3,7 +3,7 @@ import Link from "next/link"
 import { buttonVariants } from "@/ui/button"
 import { Separator } from "@/ui/separator"
 import { Heading } from "@/ui/typography"
-import { NAV_LINKS } from "@/utils/constants"
+import { NAV_LINKS } from "@/constants/layout"
 
 const Footer = () => {
   return (

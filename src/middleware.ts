@@ -19,9 +19,8 @@ export default withAuth(
     if (
       (!isAuth || token?.role === "CUSTOMER") &&
       sensitiveRoutes.some((route) => pathname.startsWith(route))
-    ) {
+    )
       return NextResponse.redirect(new URL("/auth", req.url))
-    }
   },
   {
     callbacks: {

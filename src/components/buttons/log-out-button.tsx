@@ -4,9 +4,7 @@ import { DropdownMenuItem, DropdownMenuItemProps } from "@/ui/dropdown-menu"
 import { LogOut } from "lucide-react"
 import { signOut } from "next-auth/react"
 
-type LogOutButtonProps = DropdownMenuItemProps & {}
-
-const LogOutButton: FC<LogOutButtonProps> = ({
+const LogOutButton: FC<DropdownMenuItemProps> = ({
   className,
   children,
   ...props

@@ -15,10 +15,7 @@ export default function RootLayout({
     <html
       lang="en"
       dir="ltr"
-      className={cn(
-        "text-xs sm:text-sm antialiased light",
-        comfortaa.className
-      )}
+      className={cn("text-xs sm:text-sm antialiased", comfortaa.className)}
     >
       <body className="min-h-screen flex flex-col antialiased">
         <Providers>{children}</Providers>

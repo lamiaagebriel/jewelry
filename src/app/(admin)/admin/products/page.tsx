@@ -3,10 +3,34 @@ export const metadata: Metadata = {
   title: `Products | ${process.env.APP_TITLE}`,
 }
 
-const Products = () => {
+import { Heading } from "@/ui/typography"
+import { DataTable } from "@/ui/data-table"
+
+import { ProductsDialog } from "@/components/dialogs/components"
+import { getProducts } from "@/actions"
+import { PRODUCTS_COLUMNS } from "@/constants/columns"
+import { getCategories } from "@/lib/fn"
+
+const Products = async () => {
+  const dbProducts = await getProducts()
+  const products =
+    dbProducts.status === "success" && dbProducts.data?.length
+      ? dbProducts.data
+      : []
+  const categories = getCategories(products)
+
   return (
     <section>
-      <div className="container">Products</div>
+      <div className="container py-4 space-y-4">
+        <div className="flex items-center justify-between space-y-2 mb-10">
+          <Heading variant="h3">Products</Heading>
+          <div className="flex items-center gap-4">
+            <ProductsDialog categories={categories} />
+          </div>
+        </div>
+
+        <DataTable search="title" data={products} columns={PRODUCTS_COLUMNS} />
+      </div>
     </section>
   )
 }
