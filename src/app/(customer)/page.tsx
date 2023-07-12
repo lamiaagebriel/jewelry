@@ -5,14 +5,11 @@ import Link from "next/link"
 import { Image } from "@/ui/image"
 
 import { Heading, Paragraph } from "@/ui/typography"
-import { ArrowRight, Eye, Instagram, ShoppingCart } from "lucide-react"
+import { ArrowRight, Instagram } from "lucide-react"
 import { buttonVariants } from "@/ui/button"
 import { HERO, STATS } from "@/constants/layout"
-import { AddToCartButton } from "@/components/buttons"
 import { getProducts } from "@/actions"
-import { Badge } from "@/ui/badge"
-import { getPrice } from "@/lib/fn"
-import Product from "@/components/product"
+import { Product } from "@/components/products"
 
 const Home = async () => {
   const products = await getProducts()
@@ -120,29 +117,31 @@ const Home = async () => {
       </section>
 
       {/* Instagram  */}
-      {/* <section className="relative">
-        <div className="grid grid-cols-4 md:grid-cols-8 overflow-hidden">
-          {PRODUCTS.slice(0, 8).map((product) => (
-            <div key={product.id} className="relative w-full group">
-              <div className="aspect-w-1 aspect-h-1 overflow-hidden after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-primary/10">
-                <Image src={product.imageSrc} alt={product.imageAlt} />
+      {products.status === "success" && products?.data?.length && (
+        <section className="relative">
+          <div className="grid grid-cols-4 md:grid-cols-8 overflow-hidden">
+            {products.data?.slice(-8).map((product) => (
+              <div key={product.id} className="relative w-full group">
+                <div className="aspect-w-1 aspect-h-1 overflow-hidden after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-primary/10">
+                  <Image src={product.image} alt={`${product.title} Image`} />
+                </div>
+
+                <Link
+                  href={{ pathname: `/products/${product.slug}` }}
+                  target="_blank"
+                  className="absolute top-0 left-0 w-full h-full bg-primary/10 text-primary-foreground place-items-center hidden group-hover:grid transition-colors"
+                >
+                  <Instagram className="w-6 h-6" />
+                </Link>
               </div>
+            ))}
+          </div>
 
-              <Link
-                href={{ pathname: `/products/${product.id}` }}
-                target="_blank"
-                className="absolute top-0 left-0 w-full h-full bg-primary/10 text-primary-foreground place-items-center hidden group-hover:grid transition-colors"
-              >
-                <Instagram className="w-6 h-6" />
-              </Link>
-            </div>
-          ))}
-        </div>
-
-        <Paragraph className="absolute top-2/4 left-2/4 -translate-y-full -translate-x-2/4 bg-background p-2">
-          #{process.env.APP_TITLE}
-        </Paragraph>
-      </section> */}
+          <Paragraph className="absolute top-2/4 left-2/4 -translate-y-full -translate-x-2/4 bg-background p-2">
+            #{process.env.APP_TITLE}
+          </Paragraph>
+        </section>
+      )}
     </>
   )
 }

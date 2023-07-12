@@ -8,11 +8,11 @@ import {
 } from "react-hook-form/dist/types"
 
 import { Cross2Icon } from "@radix-ui/react-icons"
-import { AlertDialogFormProps, Field } from "@/types/dialogs"
+import { FormProps, Field } from "@/types/form"
 import { AlertDialogFooter } from "@/ui/alert-dialog"
 import { Button } from "@/ui/button"
 import {
-  Form,
+  Form as UIForm,
   FormControl,
   FormDescription as UIFormDescription,
   FormField,
@@ -33,14 +33,16 @@ import { Textarea } from "@/ui/textarea"
 import { Toggle } from "@/ui/toggle"
 import { useToast } from "@/ui/use-toast"
 import { Checkbox } from "@/ui/checkbox"
+import { cn } from "@/lib/shadcn-ui"
 
-const AlertDialogForm = ({
+const Form = ({
+  className,
   form,
   fields,
   onSubmit,
   submit = { children: "Submit" },
   children = undefined,
-}: AlertDialogFormProps) => {
+}: FormProps) => {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const submitHandler = async (values: FieldValues) => {
@@ -60,76 +62,80 @@ const AlertDialogForm = ({
 
   return (
     <>
-      <Form {...form}>
+      <UIForm {...form}>
         <form
           onSubmit={form.handleSubmit(submitHandler)}
-          className="px-2 space-y-8 max-h-[75vh] overflow-y-auto"
+          className={cn(
+            "px-2 space-y-8 max-h-[75vh] overflow-y-auto",
+            className
+          )}
         >
-          {fields.map((field, i) => (
-            <FormField
-              key={i}
-              control={form.control}
-              name={field.name.toString()}
-              render={({ field: inputField }) =>
-                field.type === "checkbox" ? (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md py-2">
-                    <FormControl>
-                      <Checkbox
-                        checked={inputField.value}
-                        onCheckedChange={inputField.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
+          <div id="fields">
+            {fields.map((field, i) => (
+              <FormField
+                key={i}
+                control={form.control}
+                name={field.name.toString()}
+                render={({ field: inputField }) =>
+                  field.type === "checkbox" ? (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md py-2">
+                      <FormControl>
+                        <Checkbox
+                          checked={inputField.value}
+                          onCheckedChange={inputField.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>{field.label}</FormLabel>
+                        <FormDescription field={field} />
+                      </div>
+                    </FormItem>
+                  ) : (
+                    <FormItem>
                       <FormLabel>{field.label}</FormLabel>
+                      <FormControl>
+                        <>
+                          {field.type === "input" && (
+                            <InputForm
+                              field={field}
+                              isLoading={isLoading}
+                              inputField={inputField}
+                            />
+                          )}
+
+                          {field.type === "textarea" && (
+                            <Textarea
+                              disabled={isLoading}
+                              {...field.textarea}
+                              {...inputField}
+                            />
+                          )}
+
+                          {field.type === "select" && (
+                            <SelectForm
+                              field={field}
+                              isLoading={isLoading}
+                              inputField={inputField}
+                            />
+                          )}
+                        </>
+                      </FormControl>
+
                       <FormDescription field={field} />
-                    </div>
-                  </FormItem>
-                ) : (
-                  <FormItem>
-                    <FormLabel>{field.label}</FormLabel>
-                    <FormControl>
-                      <>
-                        {field.type === "input" && (
-                          <InputForm
-                            field={field}
-                            isLoading={isLoading}
-                            inputField={inputField}
-                          />
-                        )}
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }
+              />
+            ))}
+          </div>
 
-                        {field.type === "textarea" && (
-                          <Textarea
-                            disabled={isLoading}
-                            {...field.textarea}
-                            {...inputField}
-                          />
-                        )}
-
-                        {field.type === "select" && (
-                          <SelectForm
-                            field={field}
-                            isLoading={isLoading}
-                            inputField={inputField}
-                          />
-                        )}
-                      </>
-                    </FormControl>
-
-                    <FormDescription field={field} />
-                    <FormMessage />
-                  </FormItem>
-                )
-              }
-            />
-          ))}
-
+          {/* {children} */}
           <AlertDialogFooter>
             <Button type="submit" isLoading={isLoading} {...submit} />
           </AlertDialogFooter>
         </form>
-      </Form>
-
-      {children}
+      </UIForm>
     </>
   )
 }
@@ -201,14 +207,14 @@ const SelectForm: FC<{
         </FormControl>
         <SelectContent className="max-h-80">
           {field.items.map((item, i) => (
-            <SelectItem key={i} value={item.value}>
-              {item.label}
-            </SelectItem>
+            <SelectItem key={i} {...item} />
           ))}
 
-          <SelectSeparator />
           {field.isNewable && (
-            <SelectItem value="new">add new value</SelectItem>
+            <>
+              <SelectSeparator />
+              <SelectItem value="new">add new value</SelectItem>
+            </>
           )}
         </SelectContent>
       </Select>
@@ -228,4 +234,4 @@ const FormDescription: FC<
   )
 }
 
-export default AlertDialogForm
+export default Form

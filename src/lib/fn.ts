@@ -13,7 +13,7 @@
 //     // .then((res) => res.json())
 //   }
 
-import { SelectItem } from "@/types/dialogs"
+import { SelectItemProps } from "@/ui/select"
 import { Product } from "@prisma/client"
 
 export const fetcher = async <T>(
@@ -49,7 +49,7 @@ export const getPrice = (
   )
 }
 
-export const getCategories = (products: Product[]): SelectItem[] => {
+export const getCategories = (products: Product[]): SelectItemProps[] => {
   const categoriesSet: Set<string> = new Set()
 
   for (const product of products) {
@@ -63,4 +63,13 @@ export const getCategories = (products: Product[]): SelectItem[] => {
     value: category,
     label: category,
   }))
+}
+
+export const getCurrency = (currency: number): string => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(currency)
 }

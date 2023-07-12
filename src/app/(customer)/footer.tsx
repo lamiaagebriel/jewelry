@@ -3,7 +3,7 @@ import Link from "next/link"
 import { buttonVariants } from "@/ui/button"
 import { Separator } from "@/ui/separator"
 import { Heading } from "@/ui/typography"
-import { NAV_LINKS } from "@/constants/layout"
+import { NAV_LINKS, SOCIAL_MEDIA } from "@/constants/layout"
 
 const Footer = () => {
   return (
@@ -66,22 +66,18 @@ const Footer = () => {
             </p>
           </div>
           <div>
-            <Link
-              href={{ pathname: "/facebook.com" }}
-              className={buttonVariants({
-                variant: "link",
-              })}
-            >
-              Facebook
-            </Link>
-            <Link
-              href={{ pathname: "/instagram.com" }}
-              className={buttonVariants({
-                variant: "link",
-              })}
-            >
-              instagram
-            </Link>
+            {SOCIAL_MEDIA.map((link, i) => (
+              <Link
+                key={i}
+                href={{ pathname: link.to }}
+                target="_blank"
+                className={buttonVariants({
+                  variant: "link",
+                })}
+              >
+                {link.title}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

@@ -1,9 +1,9 @@
 "use server"
 
 import { db } from "@/lib/prisma"
-import { SelectItem } from "@/types/dialogs"
+import { SelectItemProps } from "@/ui/select"
 
-export async function getCategories(): Promise<ApiResponse<SelectItem[]>> {
+export async function getCategories(): Promise<ApiResponse<SelectItemProps[]>> {
   try {
     const categories = await db.product.findMany({
       select: { category: true },
@@ -17,7 +17,7 @@ export async function getCategories(): Promise<ApiResponse<SelectItem[]>> {
           ({
             value: item.category,
             label: item.category,
-          } as SelectItem)
+          } as SelectItemProps)
       ),
     }
   } catch (error: any) {

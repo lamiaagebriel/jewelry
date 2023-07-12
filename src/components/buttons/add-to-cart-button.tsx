@@ -1,19 +1,21 @@
 "use client"
 
-import { Button, ButtonProps, buttonVariants } from "@/ui/button"
-
-// import { useAppDispatch, useAppSelector } from "@/context/store"
-// import { CartProduct, add_to_cart, useCart } from "@/context/store/cart"
 import { FC } from "react"
-import { useToast } from "@/ui/use-toast"
-import { Product } from "@prisma/client"
 import { cn } from "@/lib/shadcn-ui"
 
-const AddToCartButton: FC<
-  ButtonProps & { product: Product }
-  // & { add_product: CartProduct }
-> = ({ product, className, ...props }) => {
-  //   const dispatch = useAppDispatch()
+import { Button, ButtonProps } from "@/ui/button"
+import { useToast } from "@/ui/use-toast"
+
+import { useAppDispatch } from "@/constants/store"
+import { addCart } from "@/constants/store/cart"
+import { CartProduct } from "@/types/cart"
+
+const AddToCartButton: FC<ButtonProps & { cart: CartProduct }> = ({
+  cart,
+  className,
+  ...props
+}) => {
+  const dispatch = useAppDispatch()
   const { toast } = useToast()
 
   return (
@@ -21,10 +23,18 @@ const AddToCartButton: FC<
       variant="outline"
       size="icon"
       className={cn("w-9 h-9 p-2 text-foreground/95", className)}
-      disabled={product.quantity === 0}
+      disabled={cart.product.quantity === 0}
       onClick={() => {
-        // dispatch(add_to_cart(product))
-        toast({ title: "Added to cart successfully." })
+        try {
+          dispatch(addCart({ product: cart.product, quantity: 1, size: 1 }))
+          toast({ title: "Added to cart successfully." })
+        } catch (error: any) {
+          toast({
+            variant: "destructive",
+            title: "Ooh, This is too bad.",
+            description: error.message,
+          })
+        }
       }}
       {...props}
     />

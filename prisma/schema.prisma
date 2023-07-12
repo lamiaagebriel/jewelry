@@ -8,7 +8,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  relationMode = "foreignKeys"
+  relationMode = "prisma"
 }
 
 
@@ -102,11 +102,11 @@ model Product {
   slug              String       @unique
   title             String
   image             String
-  description       String
-  category          String?
-  price             Float        @default(0)
-  discount          Float        @default(0)
-  quantity          Float        @default(0)
+  description       String       @db.LongText
+  category          String?      
+  price             Float        @default(0) @db.Float
+  discount          Float        @default(0) 
+  quantity          Int          @default(0) @db.Int
   is_new            Boolean      @default(false)
   created_at        DateTime     @default(now())
   updated_at        DateTime     @updatedAt
@@ -127,6 +127,9 @@ model Order {
   user_id           String
   products          Product[]
   address           Address?
+  status            Status       @default(PENDING)
+  payment_method    PaymentMethod @default(CASH)
+  amount            Float        @default(0) @db.Float
   created_at        DateTime     @default(now())
   updated_at        DateTime     @updatedAt
 
@@ -134,7 +137,18 @@ model Order {
 
   @@index([user_id])
 }
+enum Status {
+  PENDING
+  PAID
+  UNPAID
+  PROCESSING
+  CANCELED
+}
 
+enum PaymentMethod {
+  CASH
+  PAYPAL
+}
 
 // model Review {
 //   id                  String    @id @default(cuid())

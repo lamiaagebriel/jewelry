@@ -11,6 +11,7 @@ import { Badge } from "@/ui/badge"
 import { getPrice } from "@/lib/fn"
 import { Product } from "@prisma/client"
 import { cn } from "@/lib/shadcn-ui"
+import GetPrice from "./get-price"
 
 type ProductProps = { product: Product; className?: string }
 const Product: FC<ProductProps> = ({ product, className }) => {
@@ -33,7 +34,7 @@ const Product: FC<ProductProps> = ({ product, className }) => {
 
         <div className="absolute top-0 left-0 w-full h-full bg-primary/20 text-primary-foreground place-items-center hidden group-hover:grid transition-colors">
           <div className="container flex justify-center items-center gap-4">
-            <AddToCartButton product={product}>
+            <AddToCartButton cart={{ product, quantity: 1, size: 1 }}>
               <ShoppingCart />
             </AddToCartButton>
 
@@ -54,24 +55,7 @@ const Product: FC<ProductProps> = ({ product, className }) => {
       <Link href={{ pathname: `/products/${product.slug}` }}>
         <div className="py-4 text-center space-y-3">
           <Heading variant="h6"> {product.title}</Heading>
-          <div className="inline-flex items-center justify-center gap-2">
-            <Paragraph
-              variant="muted"
-              className={
-                (product.discount > 0 &&
-                  "line-through text-destructive text-xs") ||
-                ""
-              }
-            >
-              ${getPrice(product.price, product.discount).toFixed(1)}
-            </Paragraph>
-
-            {product.discount > 0 && (
-              <Paragraph variant="muted">
-                ${getPrice(product.price, product.discount).toFixed(1)}
-              </Paragraph>
-            )}
-          </div>
+          <GetPrice price={product.price} discount={product.discount} />
         </div>
       </Link>
     </div>

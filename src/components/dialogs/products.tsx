@@ -4,19 +4,18 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Button } from "@/ui/button"
-import {
-  AlertDialogLayout,
-  AlertDialogForm,
-} from "@/components/dialogs/components"
+import { AlertDialogLayout } from "@/components/dialogs/components"
 import {
   CreateProductProps,
   createProductSchema,
 } from "@/types/validations/products"
 import { createProduct } from "@/actions/products/post"
 import { useToast } from "@/ui/use-toast"
-import { Field, SelectItem } from "@/types/dialogs"
+import { Field } from "@/types/form"
+import { SelectItemProps } from "@/ui/select"
+import Form from "@/components/form"
 
-const ProductsDialog = ({ categories }: { categories: SelectItem[] }) => {
+const ProductsDialog = ({ categories }: { categories: SelectItemProps[] }) => {
   const { toast } = useToast()
   const form = useForm<CreateProductProps>({
     resolver: zodResolver(createProductSchema),
@@ -122,7 +121,7 @@ const ProductsDialog = ({ categories }: { categories: SelectItem[] }) => {
       trigger={<Button>New Product</Button>}
       className="w-full sm:max-w-[600px]"
     >
-      <AlertDialogForm form={form} fields={fields} onSubmit={onSubmit} />
+      <Form form={form} fields={fields} onSubmit={onSubmit} />
     </AlertDialogLayout>
   )
 }

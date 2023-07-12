@@ -2,8 +2,8 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 import { ButtonProps } from "@/ui/button"
 import { InputProps } from "@/ui/input"
 import { TextareaProps } from "@/ui/textarea"
+import { SelectItemProps } from "@/ui/select"
 
-type SelectItem = { value: string; label: string }
 type Field<T> = {
   name: T
   label: string
@@ -21,12 +21,13 @@ type Field<T> = {
       type: "select"
       select?: SelectPrimitive.SelectTriggerProps
       isNewable?: boolean
-      items: SelectItem[]
+      items: SelectItemProps[]
     }
   | { type: "checkbox" }
 )
 
-type AlertDialogFormProps = {
+type FormProps = {
+  className?: string
   form: UseFormReturn<FieldValues, any, undefined>
   // fields: () => Promise<Field<keyof FieldName>[]>
   fields: Field<keyof FieldName>[]

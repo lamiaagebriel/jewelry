@@ -108,7 +108,7 @@ const Product: FC<ProductProps> = async ({ params }) => {
               variant="default"
               size="lg"
               className="text-xl p-6 w-full text-primary-foreground"
-              product={product}
+              cart={{ product, quantity: 1, size: 1 }}
             >
               <ShoppingCart className="mr-2 w-6 h-6" />
               Add To Cart

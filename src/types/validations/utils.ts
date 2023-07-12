@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { ZodString, z } from "zod"
 
 export const req_type_message = (title: string, type: string) => {
   return {
@@ -16,4 +16,7 @@ export const req_positive_number = (title: string) => {
   return z
     .number(req_type_message(title, "number"))
     .min(0, `${title} must be positive.`)
+}
+export const en_characters = (str: ZodString) => {
+  return str.regex(/^[a-zA-Z\s.,'"-]+$/, "Only english characters is valid.")
 }

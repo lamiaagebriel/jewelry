@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: `Products | ${process.env.APP_TITLE}`,
 }
-import ProductsLayout from "@/components/products"
+import { Products as ProductsLayout } from "@/components/products"
 import { getProducts } from "@/actions"
 const Products = async () => {
   const products = await getProducts()
