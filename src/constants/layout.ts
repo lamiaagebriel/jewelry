@@ -2,6 +2,14 @@ import { Field } from "@/types/form"
 import { CreateCartProps } from "@/types/validations/cart"
 import { SelectItemProps } from "@/ui/select"
 import { PaymentMethod } from "@prisma/client"
+import {
+  Activity,
+  CreditCard,
+  DollarSign,
+  LucideIcon,
+  Users,
+} from "lucide-react"
+import { StatsProps } from "@/components/overview/stats"
 
 export const EGYPT_CITIES: SelectItemProps[] = [
   { value: "Alexandria", children: "Alexandria", disabled: false },
@@ -96,6 +104,8 @@ export const STATS = [
 ]
 
 // -------------------- CUSTOMER/CART
+export const SHIPPING_COST = 10
+
 export const PAYMENT_METHODS: (SelectItemProps & { value: PaymentMethod })[] = [
   {
     value: "CASH",
@@ -154,6 +164,7 @@ export const CART_ORDER_INFO_FIELDS: Field<keyof CreateCartProps>[] = [
     items: PAYMENT_METHODS,
   },
 ]
+
 // -------------------- CUSTOMER/FOOTER
 export const SOCIAL_MEDIA: NavLink[] = [
   { to: "https://facebook.com", title: "Facebook" },
@@ -166,4 +177,88 @@ export const NAV_LINKS_ADMIN: NavLink[] = [
   { to: "/admin/products", title: "Products" },
   { to: "/admin/users", title: "Users" },
   { to: "/admin/orders", title: "Orders" },
+]
+
+export const STATS_CARDS: StatsProps = {
+  cards: [
+    {
+      title: "Total Revenue",
+      icon: DollarSign,
+      indicator: "$",
+      value: 45231.89,
+      description: "+20.1% from last month.",
+    },
+    {
+      title: "Subscriptions",
+      icon: Users,
+      indicator: "$",
+      value: 45231.89,
+      description: "+20.1% from last month.",
+    },
+    {
+      title: "Sales",
+      icon: CreditCard,
+      indicator: "+",
+      value: 12234,
+      description: "+19% from last month.",
+    },
+    {
+      title: "Active Now",
+      icon: Activity,
+      indicator: "+",
+      value: 573,
+      description: "+201 since last month.",
+    },
+  ],
+}
+
+export const OVERVIEW_CHART_DATA = [
+  {
+    name: "Jan",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Feb",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Mar",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Apr",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "May",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Jun",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Jul",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Aug",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Sep",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Oct",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Nov",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: "Dec",
+    total: Math.floor(Math.random() * 5000) + 1000,
+  },
 ]

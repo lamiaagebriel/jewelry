@@ -6,15 +6,14 @@ import { Table, TableBody, TableCell, TableRow } from "@/ui/table"
 import { getCurrency } from "@/lib/fn"
 import { CartState } from "@/types/cart"
 import { GetPrice } from "@/components/products"
-import SummaryDataTable from "./summary-data-table"
+import SummaryDataTable from "../summary-data-table"
+import { SHIPPING_COST } from "@/constants/layout"
 
 type CartSummaryProps = {
   children?: React.ReactNode
   cart: CartState
 }
 const CartSummary: FC<CartSummaryProps> = ({ children, cart }) => {
-  const SHIPPING_COST = 10
-
   const SUMMARY: { label: React.ReactNode; value: React.ReactNode }[] = [
     {
       label: "Subtotal",

@@ -1,20 +1,6 @@
-// export const fetcher = async <T>(
-//   url: RequestInfo | URL,
-//   options: RequestInit | undefined
-// ) =>
-//   // : Promise<ApiResponse<T>>
-//   {
-//     return await fetch(
-//       process.env.NODE_ENV === "development"
-//         ? `http://localhost:3000/api${url}`
-//         : `https://${process.env.VERCEL_URL}/api${url}`,
-//       options
-//     )
-//     // .then((res) => res.json())
-//   }
-
+import { CartProduct } from "@/types/cart"
 import { SelectItemProps } from "@/ui/select"
-import { Product } from "@prisma/client"
+import { OrderProduct, Product } from "@prisma/client"
 
 export const fetcher = async <T>(
   url: RequestInfo | URL,
@@ -49,6 +35,16 @@ export const getPrice = (
   )
 }
 
+export const getCurrency = (currency: number): string => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(currency)
+}
+
+// Products
 export const getCategories = (products: Product[]): SelectItemProps[] => {
   const categoriesSet: Set<string> = new Set()
 
@@ -61,15 +57,40 @@ export const getCategories = (products: Product[]): SelectItemProps[] => {
   const distinctCategories: string[] = Array.from(categoriesSet)
   return distinctCategories.map((category) => ({
     value: category,
-    label: category,
+    children: category,
   }))
 }
 
-export const getCurrency = (currency: number): string => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  }).format(currency)
+// Order
+export const getOrderProducts = (
+  products: (OrderProduct & { product: Product })[]
+): CartProduct[] => {
+  return products.map(({ product, quantity, size }) => ({
+    product: product,
+    quantity,
+    size,
+  }))
+}
+
+export const getOrderActualCost = (
+  products: (OrderProduct & { product: Product })[]
+): number => {
+  return products.reduce(
+    (acc, { product, quantity }) => acc + product.price * quantity,
+    0
+  )
+}
+export const getOrderCost = (
+  products: (OrderProduct & { product: Product })[]
+): number => {
+  return products.reduce(
+    (acc, { product, quantity }) =>
+      acc + getPrice(product.price, product.discount) * quantity,
+    0
+  )
+}
+export const getOrderTotalItems = (
+  products: (OrderProduct & { product: Product })[]
+): number => {
+  return products.reduce((acc, { quantity }) => acc + quantity, 0)
 }

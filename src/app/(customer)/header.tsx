@@ -67,14 +67,15 @@ const Header = async () => {
                   <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>
                       {session.user?.name}
-                      <p className="text-[10px] text-slate-500">
+                      <p className="text-[10px] text-muted-foreground">
                         {session.user?.email}
                       </p>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>Profile</DropdownMenuItem>
-                      <DropdownMenuItem>Settings</DropdownMenuItem>
+                      <Link href={{ pathname: "/orders" }}>
+                        <DropdownMenuItem>Orders</DropdownMenuItem>
+                      </Link>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <LogOutButton />

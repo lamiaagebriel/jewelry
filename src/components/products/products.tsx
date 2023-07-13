@@ -55,9 +55,7 @@ const Products: FC<ProductsProps> = ({ products }) => {
             </SelectItem>
 
             {categories.map((category, i) => (
-              <SelectItem key={i} value={category.value}>
-                {category.label}
-              </SelectItem>
+              <SelectItem key={i} {...category} />
             ))}
           </SelectContent>
         </Select>

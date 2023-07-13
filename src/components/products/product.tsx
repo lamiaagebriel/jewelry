@@ -13,8 +13,18 @@ import { Product } from "@prisma/client"
 import { cn } from "@/lib/shadcn-ui"
 import GetPrice from "./get-price"
 
-type ProductProps = { product: Product; className?: string }
-const Product: FC<ProductProps> = ({ product, className }) => {
+type ProductProps = {
+  product: Product
+  className?: string
+  quantity?: number
+  isTitle?: boolean
+}
+const Product: FC<ProductProps> = ({
+  product,
+  className,
+  quantity,
+  isTitle = true,
+}) => {
   return (
     <div className="relative group">
       <div
@@ -54,8 +64,14 @@ const Product: FC<ProductProps> = ({ product, className }) => {
 
       <Link href={{ pathname: `/products/${product.slug}` }}>
         <div className="py-4 text-center space-y-3">
-          <Heading variant="h6"> {product.title}</Heading>
-          <GetPrice price={product.price} discount={product.discount} />
+          {isTitle && <Heading variant="h6"> {product.title}</Heading>}
+
+          <div className="flex flex-col items-center">
+            <GetPrice price={product.price} discount={product.discount} />
+            {quantity && (
+              <p className="ml-4 text-xs text-slate-500">x {quantity}</p>
+            )}
+          </div>
         </div>
       </Link>
     </div>

@@ -1,13 +1,13 @@
 "use client"
 
 import { FC, useState } from "react"
+import { useRouter } from "next/navigation"
 
 import { Button, ButtonProps } from "@/ui/button"
 import { useToast } from "@/ui/use-toast"
 import { useAppDispatch, useAppSelector, useCart } from "@/constants/store"
 import { createOrder } from "@/actions"
 import { resetCart } from "@/constants/store/cart"
-import { useRouter } from "next/navigation"
 
 const SubmitOrderButton: FC<ButtonProps> = ({ className, ...props }) => {
   const router = useRouter()
@@ -33,7 +33,7 @@ const SubmitOrderButton: FC<ButtonProps> = ({ className, ...props }) => {
       if (res.status === "fields") {
         toast({
           variant: "destructive",
-          title: "Ooh, something wrong occurred.",
+          title: "Uh oh! Something went wrong.",
           description: res.errors.pop()?.message,
         })
         return

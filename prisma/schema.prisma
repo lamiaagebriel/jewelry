@@ -113,23 +113,44 @@ model Product {
  
   
   images            Image[]
-  orders            Order[]
+  orders            OrderProduct[]
+  
 }
 
 
   // sizes: [5, 6, 7, 8, 9],
   // color: "White",
     
+ 
+ 
+model OrderProduct {
+  id                String       @id @default(cuid())
+  order_id          String
+  product_id        String
+  price             Float        @default(0) @db.Float
+  discount          Float        @default(0) 
+  quantity          Int          @default(1) @db.Int
+  size              Int          @default(0) @db.Int
+  
+  
+  product           Product         @relation(fields: [product_id], references: [id])
+  order             Order           @relation(fields: [order_id], references: [id])
+
+  @@index([product_id])
+  @@index([order_id])
+} 
 
 
 model Order {
   id                String       @id @default(cuid())
   user_id           String
-  products          Product[]
+  products          OrderProduct[]
   address           Address?
   status            Status       @default(PENDING)
   payment_method    PaymentMethod @default(CASH)
-  amount            Float        @default(0) @db.Float
+  is_paid           PaymentStatus @default(UNPAID)
+  // actual_amount     Float        @default(0) @db.Float
+  // amount            Float        @default(0) @db.Float
   created_at        DateTime     @default(now())
   updated_at        DateTime     @updatedAt
 
@@ -139,15 +160,18 @@ model Order {
 }
 enum Status {
   PENDING
-  PAID
-  UNPAID
   PROCESSING
   CANCELED
 }
 
+
 enum PaymentMethod {
   CASH
   PAYPAL
+}
+enum PaymentStatus {
+  PAID
+  UNPAID
 }
 
 // model Review {

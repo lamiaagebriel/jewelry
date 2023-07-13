@@ -21,7 +21,8 @@ const GoogleButton: FC<ButtonProps> = ({ className, ...props }) => {
         } catch (error) {
           toast({
             variant: "destructive",
-            title: "An error occurred while signing in.",
+            title: "Uh oh! Something went wrong.",
+            description: "An error occurred while signing in.",
           })
         } finally {
           setIsLoading(false)

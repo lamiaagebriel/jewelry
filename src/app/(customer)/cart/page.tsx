@@ -8,25 +8,23 @@ import { useForm } from "react-hook-form"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card"
 import { Heading, Paragraph } from "@/ui/typography"
-import { toast } from "@/ui/use-toast"
 
 import {
   CartSummary,
-  EmptyCart,
   OrderInformationDialog,
   ProductCart,
-  SummaryDataTable,
 } from "@/components/cart"
-import Form from "@/components/form"
 
 import { CreateCartProps, createCartSchema } from "@/types/validations/cart"
 import { CART_ORDER_INFO_FIELDS } from "@/constants/layout"
 import { useAppDispatch, useAppSelector, useCart } from "@/constants/store"
 import { Button } from "@/ui/button"
-import { AlertDialogLayout } from "@/components/dialogs/components"
 import { addOrderInfo } from "@/constants/store/cart"
 import { Separator } from "@/ui/separator"
 import { SubmitOrderButton } from "@/components/buttons"
+import Empty from "@/components/empty"
+import { ShoppingCart } from "lucide-react"
+import SummaryDataTable from "@/components/summary-data-table"
 
 const Cart = () => {
   const cart = useAppSelector(useCart)
@@ -43,7 +41,18 @@ const Cart = () => {
       country: "",
     },
   })
-  if (!cart.products.length) return <EmptyCart />
+  if (!cart.products.length)
+    return (
+      <Empty
+        title={
+          <div className="flex items-center gap-3">
+            <ShoppingCart className="w-9 h-9 mb-2" />
+            CART IS EMPTY.
+          </div>
+        }
+        link={{ to: "/products", title: "Go Shopping" }}
+      />
+    )
 
   const onSubmit = async (fields: CreateCartProps) => {
     dispatch(addOrderInfo(fields))
@@ -65,7 +74,7 @@ const Cart = () => {
 
       <section>
         <div className="container space-y-5 md:space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr,400px] gap-5 md:gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr,0.5fr] gap-5 md:gap-10">
             <div>
               <Card className="container">
                 <div aria-labelledby="cart-heading">

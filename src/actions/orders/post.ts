@@ -5,6 +5,7 @@ import { getAuthSession } from "@/lib/next-auth"
 import { db } from "@/lib/prisma"
 import { CartState } from "@/types/cart"
 import { createCartSchema } from "@/types/validations/cart"
+import { Order, OrderProduct } from "@prisma/client"
 import { revalidateTag } from "next/cache"
 
 export async function createOrder({
@@ -123,23 +124,42 @@ export async function createOrder({
       }
 
     // Place an order
+
+    const orderProducts = fields.products.map(
+      ({ product, quantity, size }) => ({
+        product_id: product.id,
+        price: product.price,
+        discount: product.discount,
+        quantity,
+        size,
+      })
+    ) as Omit<OrderProduct, "id" | "order_id">[]
+
     const order = await db.order.create({
       data: {
         user_id: session.user.id,
-        payment_method: fields.order_info?.payment_method,
-        amount: fields.cost,
+        payment_method: fields.order_info.payment_method,
+        // actual_amount: fields.actual_cost,
+        // amount: fields.cost,
+        address: {
+          create: {
+            name: fields.order_info.name,
+            phone: fields.order_info.phone,
+            address_line: fields.order_info.address_line,
+            zip: fields.order_info.zip,
+            city: fields.order_info.city,
+            country: fields.order_info.country,
+          },
+        },
+        products: {
+          createMany: {
+            data: orderProducts,
+          },
+        },
       },
-    })
-
-    await db.address.create({
-      data: {
-        order_id: order.id,
-        name: fields.order_info.name,
-        phone: fields.order_info.phone,
-        address_line: fields.order_info.address_line,
-        zip: fields.order_info.zip,
-        city: fields.order_info.city,
-        country: fields.order_info.country,
+      include: {
+        products: true,
+        address: true,
       },
     })
 
@@ -154,6 +174,43 @@ export async function createOrder({
     }
   } catch (error: any) {
     console.log("creating order error - creation.")
+    console.log(error)
+    return { status: "failure", error: error.message }
+  }
+}
+
+export async function cancelOrder({
+  id,
+}: Pick<Order, "id">): Promise<ApiResponse<string>> {
+  try {
+    if (!id)
+      return {
+        status: "failure",
+        error: "Specify the order first.",
+      }
+
+    // Check if user is logged in
+    const session = await getAuthSession()
+    if (!session || !session?.user.id) {
+      return {
+        status: "failure",
+        error: "Sign in first, you can't cancel an order without signing in.",
+      }
+    }
+
+    await db.order.update({
+      data: { status: "CANCELED" },
+      where: { id },
+    })
+
+    // Place an order
+    revalidateTag("orders")
+    return {
+      status: "success",
+      message: "order has been canceled successfully.",
+    }
+  } catch (error: any) {
+    console.log("canceling order error - cancelation.")
     console.log(error)
     return { status: "failure", error: error.message }
   }
