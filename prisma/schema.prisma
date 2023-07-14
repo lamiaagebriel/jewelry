@@ -32,7 +32,6 @@ model Account {
   @@unique([provider, providerAccountId])
   @@index([userId])
 }
-
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -42,7 +41,6 @@ model Session {
 
   @@index([userId])
 }
-
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -51,12 +49,10 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 enum Role {
   ADMIN
   CUSTOMER
 }
-
 model User {
   id              String    @id @default(cuid())
   name            String?
@@ -73,17 +69,33 @@ model User {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 }
-
-
 model Image {
+  id              String    @id @default(cuid())
   product_id      String
-  src             String       @unique
+  src             String       
 
   product         Product      @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@index([product_id])
 }
+model Size {
+  id              String    @id @default(cuid())
+  product_id      String
+  size           Float 
 
+  product         Product      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([product_id])
+}
+model Color {
+  id              String    @id @default(cuid())
+  product_id      String
+  color           String 
+
+  product         Product      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([product_id])
+}
 model Address {
   order_id        String       @unique
   name            String
@@ -95,8 +107,6 @@ model Address {
 
   order         Order      @relation(fields: [order_id], references: [id], onDelete: Cascade)
 }
-
-
 model Product {
   id                String       @id @default(cuid())
   slug              String       @unique
@@ -113,16 +123,11 @@ model Product {
  
   
   images            Image[]
+  sizes             Size[]
+  colors            Color[]
   orders            OrderProduct[]
   
 }
-
-
-  // sizes: [5, 6, 7, 8, 9],
-  // color: "White",
-    
- 
- 
 model OrderProduct {
   id                String       @id @default(cuid())
   order_id          String
@@ -138,9 +143,7 @@ model OrderProduct {
 
   @@index([product_id])
   @@index([order_id])
-} 
-
-
+}
 model Order {
   id                String       @id @default(cuid())
   user_id           String
@@ -163,8 +166,6 @@ enum Status {
   PROCESSING
   CANCELED
 }
-
-
 enum PaymentMethod {
   CASH
   PAYPAL

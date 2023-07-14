@@ -3,18 +3,19 @@
 import { db } from "@/lib/prisma"
 import { User } from "@prisma/client"
 
-export async function getUsers(): Promise<ApiResponse<User[]>> {
+export async function getUsers(): Promise<User[]> {
   try {
-    const users = await db.user.findMany()
+    const users = await db.user.findMany({
+      include: {
+        orders: { include: { products: { include: { product: true } } } },
+      },
+    })
 
-    return {
-      status: "success",
-      data: users,
-    }
+    return users
   } catch (error: any) {
     console.log("getting users error - GET.")
     console.log(error)
-    return { status: "failure", error: error.message }
+    return []
   } finally {
     await db.$disconnect()
   }

@@ -41,9 +41,7 @@ const SubmitOrderButton: FC<ButtonProps> = ({ className, ...props }) => {
 
       toast({ description: res.message })
       dispatch(resetCart())
-      console.log(`/orders/${res.data}`)
-      router.push(`/orders/${res.data}`)
-      // redirect(`/orders/${res.data}`)
+      router.push("/orders")
     } catch (error: any) {
       toast({
         variant: "destructive",

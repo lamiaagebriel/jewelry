@@ -3,10 +3,12 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Product } from "@prisma/client"
 
-import { DataTableColumnHeader } from "@/ui/data-table"
+import { DataTableColumnHeader, DataTableRowActions } from "@/ui/data-table"
 import { Badge } from "@/ui/badge"
-import { getPrice } from "@/lib/fn"
+import { getCurrency, getPrice } from "@/lib/fn"
 import { buttonVariants } from "@/ui/button"
+import { Image } from "@/ui/image"
+import { GetPrice } from "@/components/products"
 
 export const PRODUCTS_COLUMNS: ColumnDef<Product>[] = [
   {
@@ -21,57 +23,64 @@ export const PRODUCTS_COLUMNS: ColumnDef<Product>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "image",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="image" />
+    ),
+    cell: ({ row }) => {
+      return row.getValue("image") ? (
+        <Image
+          src={row.getValue("image")}
+          alt={`${row.getValue("title")} Image`}
+          className="aspect-1 w-28 rounded-md shadow"
+        />
+      ) : (
+        "----"
+      )
+    },
+  },
+  {
     accessorKey: "title",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title="title" />
     ),
   },
   {
     accessorKey: "category",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Category" />
+      <DataTableColumnHeader column={column} title="category" />
     ),
   },
   {
     accessorKey: "price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Price" />
+      <DataTableColumnHeader column={column} title="price" />
     ),
     cell: ({ row }) => {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(parseFloat(row.getValue("price")))
+      return (
+        <GetPrice
+          price={row.getValue("price")}
+          discount={row.getValue("discount")}
+        />
+      )
     },
   },
   {
     accessorKey: "discount",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Discount" />
+      <DataTableColumnHeader column={column} title="discount" />
     ),
     cell: ({ row }) => {
       if (parseFloat(row.getValue("discount")) === 0)
         return <Badge variant="outline">No Discount</Badge>
 
-      return (
-        <div className=" flex items-center gap-4">
-          <Badge variant="secondary">{row.getValue("discount")}%</Badge>
-          <p className="text-green-500">
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(
-              getPrice(row.getValue("price"), row.getValue("discount"))
-            )}
-          </p>
-        </div>
-      )
+      return <Badge variant="secondary">{row.getValue("discount")}%</Badge>
     },
   },
   {
     accessorKey: "quantity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Quantity" />
+      <DataTableColumnHeader column={column} title="quantity" />
     ),
     cell: ({ row }) => {
       if (parseFloat(row.getValue("quantity")) === 0)
@@ -83,7 +92,7 @@ export const PRODUCTS_COLUMNS: ColumnDef<Product>[] = [
   {
     accessorKey: "total",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Price" />
+      <DataTableColumnHeader column={column} title="total amount" />
     ),
     cell: ({ row }) => {
       const total = new Intl.NumberFormat("en-US", {
@@ -101,14 +110,14 @@ export const PRODUCTS_COLUMNS: ColumnDef<Product>[] = [
   {
     accessorKey: "created_at",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Created At" />
+      <DataTableColumnHeader column={column} title="created" />
     ),
     cell: ({ row }) => {
       return (
         <>
           {new Date(row.getValue("created_at")?.toString()!).toLocaleDateString(
             "en-US",
-            { day: "numeric", month: "short" }
+            { year: "numeric", day: "numeric", month: "short" }
           )}
         </>
       )
@@ -117,17 +126,21 @@ export const PRODUCTS_COLUMNS: ColumnDef<Product>[] = [
   {
     accessorKey: "updated_at",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Updated At" />
+      <DataTableColumnHeader column={column} title="last updated" />
     ),
     cell: ({ row }) => {
       return (
         <>
           {new Date(row.getValue("updated_at")?.toString()!).toLocaleDateString(
             "en-US",
-            { day: "numeric", month: "short" }
+            { year: "numeric", day: "numeric", month: "short" }
           )}
         </>
       )
     },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ]

@@ -10,7 +10,7 @@ import { getUsers } from "@/actions"
 import { USERS_COLUMNS } from "@/constants/columns"
 
 const Users = async () => {
-  const customers = await getUsers()
+  const users = await getUsers()
 
   return (
     <section>
@@ -19,15 +19,7 @@ const Users = async () => {
           <Heading variant="h3">Users</Heading>
         </div>
 
-        <DataTable
-          search="name"
-          data={
-            customers.status === "success" && customers.data?.length
-              ? customers.data
-              : []
-          }
-          columns={USERS_COLUMNS}
-        />
+        <DataTable search="name" data={users} columns={USERS_COLUMNS} />
       </div>
     </section>
   )

@@ -5,4 +5,5 @@ export * from "./products/post"
 
 export * from "./users/get"
 
+export * from "./orders/get"
 export * from "./orders/post"

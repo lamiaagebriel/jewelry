@@ -135,7 +135,7 @@ export async function createOrder({
       })
     ) as Omit<OrderProduct, "id" | "order_id">[]
 
-    const order = await db.order.create({
+    await db.order.create({
       data: {
         user_id: session.user.id,
         payment_method: fields.order_info.payment_method,
@@ -169,7 +169,6 @@ export async function createOrder({
     revalidateTag("addresses")
     return {
       status: "success",
-      data: order.id,
       message: "order has been placed successfully.",
     }
   } catch (error: any) {

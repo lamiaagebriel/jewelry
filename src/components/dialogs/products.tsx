@@ -14,6 +14,7 @@ import { useToast } from "@/ui/use-toast"
 import { Field } from "@/types/form"
 import { SelectItemProps } from "@/ui/select"
 import Form from "@/components/form"
+import dynamic from "next/dynamic"
 
 const ProductsDialog = ({ categories }: { categories: SelectItemProps[] }) => {
   const { toast } = useToast()
@@ -121,9 +122,13 @@ const ProductsDialog = ({ categories }: { categories: SelectItemProps[] }) => {
       trigger={<Button>New Product</Button>}
       className="w-full sm:max-w-[600px]"
     >
-      <Form form={form} fields={fields} onSubmit={onSubmit} />
+      <Form
+        className="[&>#fields]:space-y-4"
+        form={form}
+        fields={fields}
+        onSubmit={onSubmit}
+      />
     </AlertDialogLayout>
   )
 }
-
-export default ProductsDialog
+export default dynamic(() => Promise.resolve(ProductsDialog), { ssr: false })

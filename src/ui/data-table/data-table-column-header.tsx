@@ -16,30 +16,28 @@ import {
   DropdownMenuTrigger,
 } from "@/ui/dropdown-menu"
 
-interface DataTableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLParagraphElement> {
+interface DataTableColumnHeaderProps<TData, TValue> {
   column: Column<TData, TValue>
   title: string
+  className?: string
 }
 
 export const DataTableColumnHeader = <TData, TValue>({
   column,
   title,
   className,
-  ...props
 }: DataTableColumnHeaderProps<TData, TValue>) => {
   if (!column.getCanSort()) {
     return (
-      <p
-        className={buttonVariants({
-          variant: "none",
-          size: "sm",
-          className: "-ml-3 h-8 data-[state=open]:bg-accent text-sm",
-        })}
-        {...props}
-      >
-        {title}
-      </p>
+      <div className={cn("flex items-center gap-2", className)}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="-ml-3 h-8 data-[state=open]:bg-accent text-sm"
+        >
+          <span>{title}</span>
+        </Button>
+      </div>
     )
   }
 

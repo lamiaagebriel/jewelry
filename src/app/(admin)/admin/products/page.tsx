@@ -12,11 +12,7 @@ import { PRODUCTS_COLUMNS } from "@/constants/columns"
 import { getCategories } from "@/lib/fn"
 
 const Products = async () => {
-  const dbProducts = await getProducts()
-  const products =
-    dbProducts.status === "success" && dbProducts.data?.length
-      ? dbProducts.data
-      : []
+  const products = await getProducts()
   const categories = getCategories(products)
 
   return (

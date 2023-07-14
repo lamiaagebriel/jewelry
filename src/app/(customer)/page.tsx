@@ -74,7 +74,7 @@ const Home = async () => {
       </section>
 
       {/* Some Products */}
-      {products.status === "success" && products?.data?.length && (
+      {products.length && (
         <section>
           <div className="container space-y-4">
             <div className="flex justify-end items-center">
@@ -90,7 +90,7 @@ const Home = async () => {
             </div>
 
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:gap-8">
-              {products.data?.slice(0, 8).map((product, i) => (
+              {products.slice(0, 8).map((product, i) => (
                 <Product key={i} product={product} />
               ))}
             </div>
@@ -117,10 +117,10 @@ const Home = async () => {
       </section>
 
       {/* Instagram  */}
-      {products.status === "success" && products?.data?.length && (
+      {products.length && (
         <section className="relative">
           <div className="grid grid-cols-4 md:grid-cols-8 overflow-hidden">
-            {products.data?.slice(-8).map((product) => (
+            {products.slice(-8).map((product) => (
               <div key={product.id} className="relative w-full group">
                 <div className="aspect-w-1 aspect-h-1 overflow-hidden after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-primary/10">
                   <Image src={product.image} alt={`${product.title} Image`} />

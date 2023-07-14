@@ -13,9 +13,7 @@ const GetPrice: FC<GetPriceProps> = ({ price, discount, className }) => {
     <div className="inline-flex items-center justify-center gap-2">
       <Paragraph
         variant="muted"
-        className={
-          (discount > 0 && "line-through text-destructive text-xs") || ""
-        }
+        className={(discount > 0 && "line-through text-destructive") || ""}
       >
         {getCurrency(price)}
       </Paragraph>
