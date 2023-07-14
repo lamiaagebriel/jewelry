@@ -13,21 +13,14 @@ export default withAuth(
 
     const sensitiveRoutes = ["/admin", "/api"]
 
-    console.log(token?.role)
-
-    console.log(
-      (!isAuth || token?.role !== "ADMIN") &&
-        sensitiveRoutes.some((route) => pathname.startsWith(route))
-    )
-
     if (isAuthPage && isAuth)
       return NextResponse.redirect(new URL("/", req.url))
 
-    if (
-      (!isAuth || token?.role !== "ADMIN") &&
-      sensitiveRoutes.some((route) => pathname.startsWith(route))
-    )
-      return NextResponse.redirect(new URL("/auth", req.url))
+    // if (
+    //   (!isAuth || token?.role !== "ADMIN") &&
+    //   sensitiveRoutes.some((route) => pathname.startsWith(route))
+    // )
+    //   return NextResponse.redirect(new URL("/auth", req.url))
   },
   {
     callbacks: {
