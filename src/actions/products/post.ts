@@ -1,6 +1,5 @@
 "use server"
 
-import { getSizes } from "@/lib/fn"
 import { db } from "@/lib/prisma"
 import {
   CreateProductProps,
