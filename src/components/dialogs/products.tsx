@@ -14,7 +14,7 @@ import { useToast } from "@/ui/use-toast"
 import { Field } from "@/types/form"
 import { SelectItemProps } from "@/ui/select"
 import Form from "@/components/form"
-import dynamic from "next/dynamic"
+import { getSizes } from "@/lib/fn"
 
 const ProductsDialog = ({ categories }: { categories: SelectItemProps[] }) => {
   const { toast } = useToast()
@@ -65,6 +65,12 @@ const ProductsDialog = ({ categories }: { categories: SelectItemProps[] }) => {
       desc: "create a new category, if it doesn't exist.",
       isNewable: true,
       items: categories,
+    },
+    {
+      type: "input",
+      name: "sizes",
+      label: "Sizes",
+      input: { placeholder: "10, 12.5, 15, 17, 18.3" },
     },
     { type: "input", name: "price", label: "Price", input: { type: "number" } },
     {
@@ -131,4 +137,4 @@ const ProductsDialog = ({ categories }: { categories: SelectItemProps[] }) => {
     </AlertDialogLayout>
   )
 }
-export default dynamic(() => Promise.resolve(ProductsDialog), { ssr: false })
+export default ProductsDialog

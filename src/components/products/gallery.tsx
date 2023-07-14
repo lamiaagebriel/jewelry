@@ -7,7 +7,7 @@ type GalleryProps = { product: Product & { images: ImageType[] } }
 
 const Gallery: FC<GalleryProps> = ({ product }) => {
   return (
-    <Tabs defaultValue="0" className="w-full grid grid-cols-[75px,1fr]">
+    <Tabs defaultValue="0" className="grid grid-cols-[60px,1fr] gap-2">
       <TabsList
         className="bg-transparent h-full flex flex-col justify-center items-center gap-4"
         aria-orientation="vertical"

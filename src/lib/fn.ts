@@ -60,6 +60,42 @@ export const getCategories = (products: Product[]): SelectItemProps[] => {
     children: category,
   }))
 }
+export const getDescription = (str: string): { __html: string } => {
+  const lines = str.split("\n")
+  let html = ""
+
+  for (const line of lines) {
+    if (line.startsWith("- ")) {
+      // Create bullet points for Key Features, Sizes, and Colors
+      const item = line.substring(2)
+      html += `<li>${item}</li>`
+    } else if (line.includes(":")) {
+      // Create headings for Key Features, Sizes, and Colors
+      const [key, value] = line.split(":")
+      html += `<h4>${key.trim()}</h4><p>${value.trim()}</p>`
+    } else {
+      // Create regular paragraphs for the description
+      html += `<p>${line}</p>`
+    }
+  }
+
+  return { __html: html }
+}
+
+export const getSizes = (sizes: string): SelectItemProps[] =>
+  sizes.split(",").map((num) => {
+    if (Number.isNaN(parseFloat(num.trim()))) {
+      return {
+        value: num.toString(),
+        children: num,
+      }
+    }
+
+    return {
+      value: parseFloat(num.trim()).toString(),
+      children: parseFloat(num.trim()),
+    }
+  })
 
 // Order
 export const getOrderProducts = (

@@ -4,9 +4,11 @@ export const metadata: Metadata = {
 }
 import { Products as ProductsLayout } from "@/components/products"
 import { getProducts } from "@/actions"
+import { notFound } from "next/navigation"
 const Products = async () => {
   const products = await getProducts()
-  if (!products.length) throw Error("No Product Found.")
+
+  if (!products.length) notFound()
 
   return (
     <section>

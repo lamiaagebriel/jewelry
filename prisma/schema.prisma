@@ -78,24 +78,6 @@ model Image {
 
   @@index([product_id])
 }
-model Size {
-  id              String    @id @default(cuid())
-  product_id      String
-  size           Float 
-
-  product         Product      @relation(fields: [product_id], references: [id], onDelete: Cascade)
-
-  @@index([product_id])
-}
-model Color {
-  id              String    @id @default(cuid())
-  product_id      String
-  color           String 
-
-  product         Product      @relation(fields: [product_id], references: [id], onDelete: Cascade)
-
-  @@index([product_id])
-}
 model Address {
   order_id        String       @unique
   name            String
@@ -112,6 +94,7 @@ model Product {
   slug              String       @unique
   title             String
   image             String
+  sizes             String
   description       String       @db.LongText
   category          String?      
   price             Float        @default(0) @db.Float
@@ -123,8 +106,6 @@ model Product {
  
   
   images            Image[]
-  sizes             Size[]
-  colors            Color[]
   orders            OrderProduct[]
   
 }

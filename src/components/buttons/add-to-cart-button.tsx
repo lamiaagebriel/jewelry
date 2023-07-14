@@ -13,6 +13,7 @@ import { CartProduct } from "@/types/cart"
 const AddToCartButton: FC<ButtonProps & { cart: CartProduct }> = ({
   cart,
   className,
+  disabled,
   ...props
 }) => {
   const dispatch = useAppDispatch()
@@ -23,10 +24,10 @@ const AddToCartButton: FC<ButtonProps & { cart: CartProduct }> = ({
       variant="outline"
       size="icon"
       className={cn("w-9 h-9 p-2 text-foreground/95", className)}
-      disabled={cart.product.quantity === 0}
+      disabled={cart.product.quantity === 0 || disabled}
       onClick={() => {
         try {
-          dispatch(addCart({ product: cart.product, quantity: 1, size: 1 }))
+          dispatch(addCart(cart))
           toast({ title: "Added to cart successfully." })
         } catch (error: any) {
           toast({

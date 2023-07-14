@@ -12,6 +12,10 @@ export const productSchema = z.object({
   description: req_string("description"),
   category: req_string("category"),
   price: req_positive_number("price"),
+  sizes: req_string("sizes").regex(
+    /^\s*\d+(?:\.\d+)?(?:\s*,\s*\d+(?:\.\d+)?)*\s*$/,
+    "invalid format, write it carefully."
+  ),
   quantity: req_positive_number("quantity").int(
     "quantity must be only integer."
   ),
@@ -33,6 +37,7 @@ export const createProductSchema = productSchema.pick({
   discount: true,
   is_new: true,
   image: true,
+  sizes: true,
 })
 
 export interface CreateProductProps

@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     domains: [
       "images.unsplash.com",
+      "toktamjewelry.com",
       "image.unsplash.com",
       "source.unsplash.com",
       "lh3.googleusercontent.com",

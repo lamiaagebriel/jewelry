@@ -90,6 +90,12 @@ export const PRODUCTS_COLUMNS: ColumnDef<Product>[] = [
     },
   },
   {
+    accessorKey: "sizes",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="sizes" />
+    ),
+  },
+  {
     accessorKey: "total",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="total amount" />

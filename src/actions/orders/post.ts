@@ -1,6 +1,6 @@
 "use server"
 
-import { getPrice } from "@/lib/fn"
+import { getOrderCost, getPrice } from "@/lib/fn"
 import { getAuthSession } from "@/lib/next-auth"
 import { db } from "@/lib/prisma"
 import { CartState } from "@/types/cart"
@@ -80,7 +80,7 @@ export async function createOrder({
     })
 
     // Some products are missing, or sold out
-    if (products.length < fields.products.length) {
+    if (products.length != fields.products.length) {
       return {
         status: "fields",
         errors: [
@@ -111,7 +111,7 @@ export async function createOrder({
       )
     }, 0)
 
-    if (cost !== fields.cost)
+    if (parseInt(cost.toString()) !== parseInt(fields.cost.toString()))
       return {
         status: "fields",
         errors: [

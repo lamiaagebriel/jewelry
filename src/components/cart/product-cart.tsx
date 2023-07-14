@@ -10,6 +10,7 @@ import { removeCart } from "@/constants/store/cart"
 import { AddToCartButton } from "@/components/buttons"
 import GetPrice from "@/components/products/get-price"
 import { CartProduct } from "@/types/cart"
+import { HeadingVariants } from "@/ui/typography"
 
 type ProductCartProps = {
   cart: CartProduct
@@ -37,7 +38,7 @@ const ProductCart: FC<ProductCartProps> = ({
                 href={{
                   pathname: `/products/${product.slug}`,
                 }}
-                className="font-medium text-gray-700 hover:text-gray-800"
+                className={HeadingVariants({ variant: "h6" })}
               >
                 {product.title}
               </Link>
@@ -48,8 +49,10 @@ const ProductCart: FC<ProductCartProps> = ({
               <p className="ml-4 text-xs text-slate-500">x {quantity}</p>
             </div>
           </div>
-          {/* <p className="mt-1 text-sm text-gray-500">{color}</p>
-    <p className="mt-1 text-sm text-gray-500">{size}</p> */}
+          <p className="mt-[1px] text-sm text-gray-500">{product.category}</p>
+          <div className="mt-2">
+            <p>size: {size}</p>
+          </div>
         </div>
 
         <div className="mt-4 flex-1 flex items-end justify-between">
@@ -90,7 +93,7 @@ const ProductCart: FC<ProductCartProps> = ({
             <AddToCartButton
               cart={{
                 product,
-                quantity: 1,
+                quantity: quantity,
                 size: size,
               }}
             >
