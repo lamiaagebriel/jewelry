@@ -1,28 +1,30 @@
-import type { Metadata } from "next"
-export const metadata: Metadata = { title: `Orders | ${process.env.APP_TITLE}` }
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: `Orders | ${process.env.APP_TITLE}`,
+};
 
-import Link from "next/link"
-import { redirect } from "next/navigation"
-import { getAuthSession } from "@/lib/next-auth"
-import { db } from "@/lib/prisma"
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getAuthSession } from "@/lib/next-auth";
+import { db } from "@/lib/prisma";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/ui/card"
-import { Badge } from "@/ui/badge"
-import { Heading, Paragraph } from "@/ui/typography"
-import { Button, buttonVariants } from "@/ui/button"
+} from "@/ui/card";
+import { Badge } from "@/ui/badge";
+import { Heading, Paragraph } from "@/ui/typography";
+import { Button, buttonVariants } from "@/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/ui/accordion"
+} from "@/ui/accordion";
 
-import { Cross2Icon } from "@radix-ui/react-icons"
+import { Cross2Icon } from "@radix-ui/react-icons";
 import {
   getCurrency,
   getOrderActualCost,
@@ -30,19 +32,19 @@ import {
   getOrderProducts,
   getOrderTotalItems,
   getPrice,
-} from "@/lib/fn"
-import { CartSummary } from "@/components/cart"
-import Empty from "@/components/empty"
-import SummaryDataTable from "@/components/summary-data-table"
-import { CART_ORDER_INFO_FIELDS, SHIPPING_COST } from "@/constants/layout"
-import { Address } from "@prisma/client"
-import { GetPrice, Product } from "@/components/products"
-import { CancelOrderButton } from "@/components/buttons"
-import { Eye } from "lucide-react"
+} from "@/lib/fn";
+import { CartSummary } from "@/components/cart";
+import Empty from "@/components/empty";
+import SummaryDataTable from "@/components/summary-data-table";
+import { CART_ORDER_INFO_FIELDS, SHIPPING_COST } from "@/constants/layout";
+import { Address } from "@prisma/client";
+import { GetPrice, Product } from "@/components/products";
+import { CancelOrderButton } from "@/components/buttons";
+import { Eye } from "lucide-react";
 
 const Orders = async () => {
-  const session = await getAuthSession()
-  if (!session) redirect("/api/auth/signin")
+  const session = await getAuthSession();
+  if (!session) redirect("/api/auth/signin");
 
   const orders = await db.order.findMany({
     where: { user_id: session.user.id },
@@ -54,7 +56,7 @@ const Orders = async () => {
       },
       address: true,
     },
-  })
+  });
 
   if (!orders.length)
     return (
@@ -62,7 +64,7 @@ const Orders = async () => {
         title="NO ORDERS YET."
         link={{ to: "/products", title: "Go Shopping" }}
       />
-    )
+    );
 
   return (
     <>
@@ -84,8 +86,8 @@ const Orders = async () => {
             <Badge variant="outline" size="default">
               {getCurrency(
                 orders.reduce((acc, order) => {
-                  if (order.status === "CANCELED") return acc
-                  return acc + getOrderCost(order.products) + SHIPPING_COST
+                  if (order.status === "CANCELED") return acc;
+                  return acc + getOrderCost(order.products) + SHIPPING_COST;
                 }, 0)
               )}{" "}
               USD spent.
@@ -95,12 +97,12 @@ const Orders = async () => {
             <Badge variant="outline" size="default">
               {getCurrency(
                 orders.reduce((acc, order) => {
-                  if (order.status === "CANCELED") return acc
-                  return acc + getOrderActualCost(order.products)
+                  if (order.status === "CANCELED") return acc;
+                  return acc + getOrderActualCost(order.products);
                 }, 0) -
                   orders.reduce((acc, order) => {
-                    if (order.status === "CANCELED") return acc
-                    return acc + getOrderCost(order.products)
+                    if (order.status === "CANCELED") return acc;
+                    return acc + getOrderCost(order.products);
                   }, 0)
               )}{" "}
               USD saved.
@@ -154,7 +156,7 @@ const Orders = async () => {
                     USD
                   </Badge>
                   <Link
-                    href={{ pathname: `/orders/${order.id}` }}
+                    href="#"
                     className={buttonVariants({
                       variant: "outline",
                       size: "icon",
@@ -198,18 +200,18 @@ const Orders = async () => {
                     <AccordionContent>
                       <SummaryDataTable
                         summaries={CART_ORDER_INFO_FIELDS.map((field) => {
-                          const data = order.address as Address
+                          const data = order.address as Address;
 
                           if (field.name === "payment_method")
                             return {
                               label: field.label,
                               value: data ? order.payment_method : "---",
-                            }
+                            };
 
                           return {
                             label: field.label,
                             value: data ? data[field.name] : "---",
-                          }
+                          };
                         })}
                       />
                     </AccordionContent>
@@ -248,6 +250,6 @@ const Orders = async () => {
         </div>
       </section>
     </>
-  )
-}
-export default Orders
+  );
+};
+export default Orders;
