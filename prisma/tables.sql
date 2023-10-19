@@ -1,5 +1,5 @@
 -- Earrings
-INSERT INTO Product (id, slug, title, image, description, category, sizes, price, discount, quantity, is_new, updated_at)
+INSERT INTO `products`(id, slug, title, image, description, category, sizes, price, discount, quantity, is_new, updated_at)
 VALUES
   (
     "cljy6krhl00032k00503vv8gd", 
@@ -61,7 +61,7 @@ VALUES
     current_timestamp
   );
 
-INSERT INTO Image(id, product_id, src)
+INSERT INTO `images`(id, product_id, src)
   VALUES
     (
       'cljy6krhl00032k00503vv8g1',
@@ -128,7 +128,7 @@ INSERT INTO Image(id, product_id, src)
 
 
 -- Necklaces
-INSERT INTO Product (id, slug, title, image, description, category, sizes, price, discount, quantity, is_new, updated_at)
+INSERT INTO `products`(id, slug, title, image, description, category, sizes, price, discount, quantity, is_new, updated_at)
 VALUES
   (
     "cljy6tkqt00072k00t7j3w1c6", 
@@ -160,8 +160,8 @@ VALUES
     current_timestamp
   );
 
-INSERT INTO Image(id, product_id, src)
-  VALUES
+INSERT INTO `images`(id, product_id, src)
+  VbALUES
     (
       'cljy6tkqt00072k00t7j3w1c1',
       'cljy6tkqt00072k00t7j3w1c6', 
@@ -187,7 +187,7 @@ INSERT INTO Image(id, product_id, src)
 
 
 -- Rings
-INSERT INTO Product (id, slug, title, image, description, category, sizes, price, discount, quantity, is_new, updated_at)
+INSERT INTO `products`(id, slug, title, image, description, category, sizes, price, discount, quantity, is_new, updated_at)
 VALUES
   (
     "cljy72l9d00102k0064hbpn7l", 
@@ -204,7 +204,7 @@ VALUES
     current_timestamp
   );
 
-INSERT INTO Image(id, product_id, src)
+INSERT INTO `images`(id, product_id, src)
   VALUES
     (
       'cljy72l9d00102k0064hbpna1',
@@ -218,7 +218,7 @@ INSERT INTO Image(id, product_id, src)
     );
 
 -- Bracelets
-INSERT INTO Product (id, slug, title, image, description, category, sizes, price, discount, quantity, is_new, updated_at)
+INSERT INTO `products`(id, slug, title, image, description, category, sizes, price, discount, quantity, is_new, updated_at)
 VALUES
   (
     "cljy73nfe00112k00onmka2lz", 
@@ -235,7 +235,7 @@ VALUES
     current_timestamp
   );
 
-INSERT INTO Image(id, product_id, src)
+INSERT INTO `images`(id, product_id, src)
   VALUES
     (
       'cljy73nfe00112k00onmka2l1',
@@ -253,7 +253,7 @@ INSERT INTO Image(id, product_id, src)
 
 
 
-INSERT INTO Product (sizes, id, slug, title, image, description, category, price, discount, quantity, is_new, updated_at)
+INSERT INTO `products`(sizes, id, slug, title, image, description, category, price, discount, quantity, is_new, updated_at)
 VALUES
 ("10, 12.2, 13, 14.1, 15, custom", "zajy6krhl00032k00503vv8gd", "diamond-engagement-ring", "Diamond Engagement Ring", "https://source.unsplash.com/featured/?jewelry,diamond", "The Diamond Engagement Ring is a breathtaking piece of jewelry that represents eternal love and commitment. This exquisite ring features a brilliant-cut diamond securely set in a lustrous platinum band. The diamond\'s exceptional sparkle and fire will captivate everyone\'s attention. It is meticulously crafted to symbolize the beauty and strength of your relationship.\n\nKey Features:\n- Brilliant-cut diamond: The center stone is a dazzling brilliant-cut diamond that radiates brilliance and elegance.\n- Platinum band: The band is crafted from premium-quality platinum, known for its durability and luxurious appearance.\n- Symbol of love: This ring serves as a timeless symbol of your enduring love and the promise of a lifelong partnership.\n- Perfect for proposals: With its stunning design and exquisite craftsmanship, it is the perfect choice for a romantic proposal.\n\nSizes:\n- Available sizes: 5, 6, 7, 8, and 9. Choose the size that fits comfortably on your finger for a perfect fit.\n\nColors:\n- Color: White. The platinum band beautifully complements the brilliance of the diamond, creating a striking contrast.", "Rings", 2999.99, 3, 10, 1, current_timestamp),
 ("5, 12.2, 13, 14.1, 15, custom", "zajy6o4x100042k00kak177z4", "gold-hoop-earrings", "Gold Hoop Earrings", "https://source.unsplash.com/featured/?jewelry,gold", "The Gold Hoop Earrings are classic accessories that add a touch of elegance to any outfit. Crafted with 14K yellow gold, these hoop earrings have a sleek and timeless design. They are versatile and can be worn for both casual and formal occasions, making them a must-have in your jewelry collection.", "Earrings", 199.99, 0, 8, 1, current_timestamp),
