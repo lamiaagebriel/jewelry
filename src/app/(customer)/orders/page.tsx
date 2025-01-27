@@ -5,7 +5,7 @@ export const metadata: Metadata = {
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getAuthSession } from "@/lib/next-auth";
+import { getAuth } from "@/lib/lucia";
 import { db } from "@/lib/prisma";
 import {
   Card,
@@ -43,11 +43,11 @@ import { CancelOrderButton } from "@/components/buttons";
 import { Eye } from "lucide-react";
 
 const Orders = async () => {
-  const session = await getAuthSession();
-  if (!session) redirect("/api/auth/signin");
+  const {user} = await getAuth();
+  if (!user) redirect("/auth");
 
   const orders = await db.order.findMany({
-    where: { user_id: session.user.id },
+    where: { user_id:  user.id },
     include: {
       products: {
         include: {

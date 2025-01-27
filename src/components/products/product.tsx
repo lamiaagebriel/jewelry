@@ -9,72 +9,89 @@ import { buttonVariants } from "@/ui/button"
 import { AddToCartButton } from "@/components/buttons"
 import { Badge } from "@/ui/badge"
 import { getPrice } from "@/lib/fn"
-import { Product } from "@prisma/client"
+import { Product as PrismaProduct } from "@prisma/client"
 import { cn } from "@/lib/shadcn-ui"
 import GetPrice from "./get-price"
 
+
+
+import * as React from "react";
+
+import { Button } from "@/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
+
+// import { Icons } from "./icons"; 
+// import { Tooltip } from "@/ui/tooltip";
+
+
+
+
 type ProductProps = {
-  product: Product
+  product: PrismaProduct
   className?: string
   quantity?: number
   isTitle?: boolean
 }
 const Product: FC<ProductProps> = ({
-  product,
+  product: e,
   className,
   quantity,
   isTitle = true,
 }) => {
   return (
-    <div className="relative group">
-      <div
-        className={cn(
-          "relative aspect-w-9 aspect-h-13 rounded-lg overflow-hidden",
-          className
-        )}
-      >
-        <Image src={product.image} alt={`${product.title} Image`} />
-        {(product.discount > 0 || product.is_new) && (
+    <Card className="gap-0 relative overflow-hidden border-none p-0 outline-none">
+      {(e.discount > 0 || e.is_new) && (
           <div className="absolute left-6 top-6">
-            <Badge variant={product.discount ? "default" : "secondary"}>
-              {product.discount ? "Sale" : "New"}
+            <Badge variant={e.discount ? "default" : "secondary"}>
+              {e.discount ? "Sale" : "New"}
             </Badge>
           </div>
         )}
 
-        <div className="absolute top-0 left-0 w-full h-full bg-primary/20 text-primary-foreground place-items-center hidden group-hover:grid transition-colors">
-          <div className="container flex justify-center items-center gap-4">
-            <AddToCartButton cart={{ product, quantity: 1, size: 1 }}>
-              <ShoppingCart />
-            </AddToCartButton>
+      <CardHeader className="relative border-none p-0 outline-none">
+        <Link href={`/products/${e.slug}`}>
+          <Image
+            src={e?.image}
+            alt={`${e?.title}`}
+            className="aspect-[9/12] border-none"
+          />
+        </Link>
 
-            <Link
-              href={{ pathname: `/products/${product.slug}` }}
-              className={buttonVariants({
-                variant: "outline",
-                size: "icon",
-                className: "w-9 h-9 p-2 text-foreground/95",
-              })}
+        <div className="absolute bottom-0 right-0 z-10 rounded-tl-xl bg-background pl-[6px] pt-[6px]">
+          <div className="absolute right-0 top-0 size-4 -translate-y-[calc(100%-6px+0.5px)] translate-x-[calc(6px-0.5px)] rounded-br-xl border-[6px] border-l-0 border-t-0 border-background" />
+          <div className="absolute bottom-0 left-0 size-4 -translate-x-[calc(100%-6px+0.5px)] translate-y-[calc(6px-0.5px)] rounded-br-xl border-[6px] border-l-0 border-t-0 border-background" />
+          <div>
+
+
+            <AddToCartButton
+              variant="default"
+              size='icon' 
+              cart={{ product: e, quantity: 1, size: Number(e?.sizes?.split(",")?.[0]) ??  1 }}
+              className="text-primary-foreground"
             >
-              <Eye />
-            </Link>
+              <ShoppingCart className="  w-6 h-6" /> 
+            </AddToCartButton>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
-      <Link href={{ pathname: `/products/${product.slug}` }}>
-        <div className="py-4 text-center space-y-3">
-          {isTitle && <Heading variant="h6"> {product.title}</Heading>}
-
-          <div className="flex flex-col items-center">
-            <GetPrice price={product.price} discount={product.discount} />
+      <Link
+        href={`/products/${e.slug}`}>
+        <CardContent className="space-y-1 p-4">
+          <CardTitle>{e?.title}</CardTitle>
+          
+          <div>
+            <GetPrice price={e.price} discount={e.discount} />
             {quantity && (
               <p className="ml-4 text-xs text-slate-500">x {quantity}</p>
             )}
           </div>
-        </div>
+       
+        </CardContent>
       </Link>
-    </div>
+    </Card>
+    
+ 
   )
 }
 export default Product

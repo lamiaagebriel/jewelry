@@ -23,8 +23,10 @@ import { SubmitOrderButton } from "@/components/buttons"
 import Empty from "@/components/empty"
 import { ShoppingCart } from "lucide-react"
 import SummaryDataTable from "@/components/summary-data-table"
+import { useRouter } from "next/navigation"
 
 const CartLayout = () => {
+  const router = useRouter()
   const cart = useAppSelector(useCart)
   const dispatch = useAppDispatch()
   const form = useForm<CreateCartProps>({
@@ -54,6 +56,7 @@ const CartLayout = () => {
 
   const onSubmit = async (fields: CreateCartProps) => {
     dispatch(addOrderInfo(fields))
+    router.refresh()
   }
 
   return (

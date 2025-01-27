@@ -13,12 +13,12 @@ import {
 import { buttonVariants } from "@/ui/button"
 import { Heading } from "@/ui/typography"
 import { NAV_LINKS } from "@/constants/layout"
-import { getAuthSession } from "@/lib/next-auth"
+import { getAuth } from "@/lib/lucia"
 import { LogOutButton, CartButton } from "@/components/buttons"
 import { getFallback } from "@/lib/shadcn-ui"
 
 const Header = async () => {
-  const session = await getAuthSession()
+  const {user} = await getAuth()
 
   return (
     <header>
@@ -49,26 +49,26 @@ const Header = async () => {
             <CartButton />
 
             <>
-              {session?.user ? (
+              {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Avatar>
                       <AvatarImage
                         src={
-                          session.user?.image || "https://github.com/shadcn.png"
+                          user?.image || "https://github.com/shadcn.png"
                         }
                       />
                       <AvatarFallback>
-                        {getFallback(session.user.name || "")}
+                        {getFallback(user.name || "")}
                       </AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>
-                      {session.user?.name}
+                      {user?.name}
                       <p className="text-[10px] text-muted-foreground">
-                        {session.user?.email}
+                        {user?.email}
                       </p>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -83,7 +83,7 @@ const Header = async () => {
                 </DropdownMenu>
               ) : (
                 <Link
-                  href={{ pathname: "/api/auth/signin" }}
+                  href={{ pathname: "/auth" }}
                   className={buttonVariants({
                     variant: "link",
                     size: "none",

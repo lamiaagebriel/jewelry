@@ -3,8 +3,7 @@ export const metadata: Metadata = {
   title: `Products | ${process.env.APP_TITLE}`,
 };
 import { Products as ProductsLayout } from "@/components/products";
-import { getProducts } from "@/actions";
-import { notFound } from "next/navigation";
+import { getProducts } from "@/actions"; 
 import { Product } from "@prisma/client";
 import Empty from "@/components/empty";
 

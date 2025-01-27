@@ -11,18 +11,20 @@ type GetPriceProps = Pick<Product, "price" | "discount"> & {
 const GetPrice: FC<GetPriceProps> = ({ price, discount, className }) => {
   return (
     <div className="inline-flex items-center justify-center gap-2">
-      <Paragraph
+    {discount > 0 && (
+        <Paragraph variant="muted" className={className}>
+          {getCurrency(getPrice(price, discount))}
+        </Paragraph>
+      )}
+      
+         <Paragraph
         variant="muted"
         className={(discount > 0 && "line-through text-destructive") || ""}
       >
         {getCurrency(price)}
       </Paragraph>
 
-      {discount > 0 && (
-        <Paragraph variant="muted" className={className}>
-          {getCurrency(getPrice(price, discount))}
-        </Paragraph>
-      )}
+      
     </div>
   )
 }

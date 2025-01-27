@@ -14,12 +14,12 @@ import {
 import { LogOutButton, ModeButton } from "@/components/buttons"
 import { getFallback } from "@/lib/shadcn-ui"
 import { NAV_LINKS_ADMIN } from "@/constants/layout"
-import { getAuthSession } from "@/lib/next-auth"
+import { getAuth } from "@/lib/lucia"
 import { Paragraph } from "@/ui/typography"
 
 const Header = async () => {
-  const session = await getAuthSession()
-  if (!session) redirect("/api/auth/signin")
+  const {user} = await getAuth()
+  if (!user) redirect("/auth")
 
   return (
     <header className="border-b">
@@ -41,19 +41,19 @@ const Header = async () => {
             <DropdownMenuTrigger asChild>
               <Avatar>
                 <AvatarImage
-                  src={session.user?.image || "https://github.com/shadcn.png"}
+                  src={user?.image || "https://github.com/shadcn.png"}
                 />
                 <AvatarFallback>
-                  {getFallback(session.user.name || "")}
+                  {getFallback(user.name || "")}
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>
-                {session.user?.name}
+                {user?.name}
                 <Paragraph variant="muted" className="text-[10px]">
-                  {session.user?.email}
+                  {user?.email}
                 </Paragraph>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />

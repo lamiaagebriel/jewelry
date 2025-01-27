@@ -1,36 +1,38 @@
-import { getToken } from "next-auth/jwt"
-import { withAuth } from "next-auth/middleware"
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default withAuth(
-  async function middleware(req) {
-    const pathname = req.nextUrl.pathname
+export async function middleware(req: NextRequest) {
+  // const pathname = req.nextUrl.pathname;
 
-    // Manage route protection
-    const token = await getToken({ req })
-    const isAuth = !!token
-    const isAuthPage = req.nextUrl.pathname.startsWith("/auth")
+  // // Fetch session from Lucia
+  // const sessionCookieName = lucia.sessionCookieName; // Name of the session cookie
+  // const sessionCookie = req.cookies.get(sessionCookieName)?.value;
 
-    const sensitiveRoutes = ["/admin", "/api"]
+  // const sessionResult = sessionCookie
+  //   ? await lucia.validateSession(sessionCookie).catch(() => null)
+  //   : null;
 
-    if (isAuthPage && isAuth)
-      return NextResponse.redirect(new URL("/", req.url))
+  // const isAuth = !!sessionResult?.user;
+  // const isAuthPage = pathname.startsWith("/auth");
 
-    // if (
-    //   (!isAuth || token?.role !== "ADMIN") &&
-    //   sensitiveRoutes.some((route) => pathname.startsWith(route))
-    // )
-    //   return NextResponse.redirect(new URL("/auth", req.url))
-  },
-  {
-    callbacks: {
-      async authorized() {
-        return true
-      },
-    },
-  }
-)
+  // const sensitiveRoutes = ["/admin", "/api"];
+
+  // // Redirect authenticated users away from the auth pages
+  // if (isAuthPage && isAuth) {
+  //   return NextResponse.redirect(new URL("/", req.url));
+  // }
+
+  // // Redirect unauthenticated users trying to access sensitive routes
+  // if (
+  //   (!isAuth || sessionResult?.user?.role !== "ADMIN") &&
+  //   sensitiveRoutes.some((route) => pathname.startsWith(route))
+  // ) {
+  //   return NextResponse.redirect(new URL("/auth", req.url));
+  // }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: ["/", "/auth", "/admin/:path*", "/api/:path*"],
-}
+};

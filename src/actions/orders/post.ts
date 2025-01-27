@@ -1,7 +1,7 @@
 "use server"
 
-import { getOrderCost, getPrice } from "@/lib/fn"
-import { getAuthSession } from "@/lib/next-auth"
+import {   getPrice } from "@/lib/fn"
+import {   getAuth,   } from "@/lib/lucia"
 import { db } from "@/lib/prisma"
 import { CartState } from "@/types/cart"
 import { createCartSchema } from "@/types/validations/cart"
@@ -42,8 +42,8 @@ export async function createOrder({
       }
 
     // Check if user is logged in
-    const session = await getAuthSession()
-    if (!session || !session?.user.id) {
+    const {user} = await getAuth()
+    if (!user?.id) {
       return {
         status: "fields",
         errors: [
@@ -58,7 +58,7 @@ export async function createOrder({
 
     // Check if user exists
     const isCustomerExist = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id:  user.id },
     })
     if (!isCustomerExist) {
       return {
@@ -137,7 +137,7 @@ export async function createOrder({
 
     await db.order.create({
       data: {
-        user_id: session.user.id,
+        user_id: user.id,
         payment_method: fields.order_info.payment_method,
         // actual_amount: fields.actual_cost,
         // amount: fields.cost,
@@ -189,8 +189,8 @@ export async function cancelOrder({
       }
 
     // Check if user is logged in
-    const session = await getAuthSession()
-    if (!session || !session?.user.id) {
+    const {user} = await getAuth()
+    if (!user?.id) {
       return {
         status: "failure",
         error: "Sign in first, you can't cancel an order without signing in.",
